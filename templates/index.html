@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Denon AVR-X1600H Control</title>
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #006cd1;
+      --primary-dark: #0040b8;
+      --danger: #f14668;
+      --warning: #ffdd57;
+      --dark: #1a1a2e;
+      --card-bg: #16213e;
+      --text: #ffffff;
+      --text-light: #a7a9be;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background-color: var(--dark);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+    
+    .hero.is-primary {
+      background: linear-gradient(135deg, #0f3443, #5b34e8);
+    }
+    
+    .hero.is-primary .title, .hero.is-primary .subtitle {
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .box {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      border-top: 3px solid var(--primary);
+    }
+    
+    .title, .subtitle {
+      color: var(--text);
+    }
+    
+    .tag.is-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .button {
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 0.5rem;
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .button.is-rounded {
+      border-radius: 290486px;
+    }
+    
+    .button.is-power-on {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+    }
+    
+    .button.is-power-off {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+    }
+    
+    .button.is-mute {
+      background-color: var(--warning);
+      color: #363636;
+      border: none;
+    }
+    
+    .button.is-unmute {
+      background-color: #3273dc;
+      color: white;
+      border: none;
+    }
+    
+    .section-title {
+      border-left: 4px solid var(--primary);
+      padding-left: 10px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: #3e4c5a;
+      outline: none;
+      opacity: 0.8;
+      transition: opacity .2s;
+    }
+    
+    .slider:hover {
+      opacity: 1;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      border: none;
+    }
+    
+    .volume-container {
+      padding: 1.5rem;
+    }
+    
+    .volume-display {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      text-align: center;
+      margin: 1rem 0;
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      display: none;
+    }
+    
+    .footer {
+      background-color: var(--card-bg);
+      color: var(--text-light);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .container {
+      padding: 1.5rem 0;
+    }
+    
+    @media screen and (max-width: 768px) {
+      .buttons {
+        justify-content: center;
+      }
+      
+      .box {
+        margin: 1rem;
+      }
+    }
+    
+    .icon-text {
+      display: flex;
+      align-items: center;
+    }
+    
+    .icon-text .icon {
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- 電源コントロール -->
+    <div class="columns is-centered">
+      <div class="column is-5">
+        <div class="box">
+          <h3 class="title is-4 section-title">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-power-off"></i>
+              </span>
+              <span>電源コントロール</span>
+            </span>
+          </h3>
+          <div class="buttons is-centered">
+            <button class="button is-power-on is-medium is-rounded" onclick="sendCommand('PWON')">
+              <span class="icon">
+                <i class="fas fa-power-off"></i>
+              </span>
+              <span>電源ON</span>
+            </button>
+            <button class="button is-power-off is-medium is-rounded" onclick="sendCommand('PWSTANDBY')">
+              <span class="icon">
+                <i class="fas fa-power-off"></i>
+              </span>
+              <span>電源OFF</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ミュートコントロール -->
+      <div class="column is-5">
+        <div class="box">
+          <h3 class="title is-4 section-title">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-volume-mute"></i>
+              </span>
+              <span>ミュートコントロール</span>
+            </span>
+          </h3>
+          <div class="buttons is-centered">
+            <button class="button is-mute is-medium is-rounded" onclick="sendCommand('MUON')">
+              <span class="icon">
+                <i class="fas fa-volume-mute"></i>
+              </span>
+              <span>ミュートON</span>
+            </button>
+            <button class="button is-unmute is-medium is-rounded" onclick="sendCommand('MUOFF')">
+              <span class="icon">
+                <i class="fas fa-volume-up"></i>
+              </span>
+              <span>ミュートOFF</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 音量コントロール -->
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <div class="box">
+          <h3 class="title is-4 section-title">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-sliders-h"></i>
+              </span>
+              <span>音量コントロール</span>
+            </span>
+          </h3>
+          <div class="volume-container">
+            <input type="range" min="{{vol_min}}" max="{{vol_max}}" value="{{vol_default}}" class="slider" id="volumeSlider">
+            <div class="volume-display">
+              音量: <span id="volumeValue">{{vol_default}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本体へのリンク -->
+<dev>
+    <div class="footer">
+      <p>
+        <a href="https://{{amp_ip}}:10443/" target="_blank" class="button is-primary is-rounded">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-external-link-alt"></i>
+            </span>
+            <span>本体設定</span>
+          </span>
+        </a>
+      </p>
+    </div>
+  </dev>
+  
+
+  <script>
+    const AVR_IP = "{{amp_ip}}:8080";
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeValue = document.getElementById('volumeValue');
+    const notification = document.getElementById('notification');
+    
+    // スライダーの値が変更されたときに表示を更新
+    volumeSlider.addEventListener('input', function() {
+      volumeValue.textContent = this.value;
+    });
+    
+    // スライダーから手を離したときに値を送信
+    volumeSlider.addEventListener('change', function() {
+      const vol = this.value;
+      sendCommand(`MV${vol.toString().padStart(2, '0')}`);
+    });
+    
+    function showNotification(message, isSuccess) {
+      notification.textContent = message;
+      notification.className = 'notification ' + 
+        (isSuccess ? 'is-success' : 'is-danger');
+      notification.style.display = 'block';
+      
+      // 2秒後に非表示
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 2000);
+    }
+
+    function sendCommand(cmd) {
+      fetch(`http://${AVR_IP}/goform/formiPhoneAppDirect.xml?${cmd}`)
+    }
+  </script>
+</body>
+</html>
