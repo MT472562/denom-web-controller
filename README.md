@@ -1,4 +1,4 @@
-# Denon AVR-X1600H Control Web App
+# Denon AVR-Series　WEB　Control App
 
 このアプリケーションは、Denon AVR-X1600H AVレシーバーをWebブラウザから簡単に操作できるようにするFlaskベースのWebアプリです。
 
