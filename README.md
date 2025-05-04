@@ -58,6 +58,7 @@ project/
 * 電源コントロール（PWON / PWSTANDBY）
 * ミュートコントロール（MUON / MUOFF）
 * 音量コントロールスライダー（MVxx）
+* 入力切替
 * 本体設定（https://{AMP_IP}:10443/）へのボタンリンク
 
 ## 注意事項
