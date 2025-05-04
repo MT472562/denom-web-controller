@@ -275,6 +275,33 @@
       </div>
     </div>
   </div>
+  <!-- 入力切り替え -->
+  <div class="columns is-centered">
+    <div class="column is-10">
+      <div class="box">
+        <h3 class="title is-4 section-title">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-plug"></i>
+            </span>
+            <span>入力切り替え</span>
+          </span>
+        </h3>
+        <div class="buttons is-centered is-flex-wrap-nowrap"> <!-- 変更点 -->
+          {% for key, item in channel.items() if item.view %}
+          <a class="button is-primary is-medium is-rounded m-1" onclick="sendCommand('{{ item.cmd }}')">
+            <span class="icon">
+              <i class="fas fa-plug"></i>
+            </span>
+            <span>{{ item.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
 
   <!-- 本体へのリンク -->
 <dev>
@@ -291,6 +318,8 @@
       </p>
     </div>
   </dev>
+
+
   
 
   <script>
